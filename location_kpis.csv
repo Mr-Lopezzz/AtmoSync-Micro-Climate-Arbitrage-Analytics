@@ -1,0 +1,7 @@
+location_id,observations,avg_temperature_c,avg_humidity_pct,avg_wind_speed_kmh,total_precipitation_mm,avg_comfort_score,high_rain_observations,high_wind_observations
+L01,720,32.22,66.73,7.03,159.26,66.96,21,26
+L02,720,31.42,68.36,7.21,170.29,69.38,24,26
+L03,720,30.39,70.05,7.08,170.64,71.81,29,23
+L04,721,31.81,67.48,6.9,191.08,68.39,22,17
+L05,720,32.5,66.44,7.0,169.39,65.78,20,17
+L06,720,30.82,69.36,6.99,154.58,71.04,16,27
