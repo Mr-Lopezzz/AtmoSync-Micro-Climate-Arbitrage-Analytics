@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "atmosync_clean.csv"
+DATA = "atmosync_clean.csv"
 
 st.set_page_config(page_title="AtmoSync Analytics", layout="wide")
 st.title("AtmoSync — Micro-Climate Analytics")
