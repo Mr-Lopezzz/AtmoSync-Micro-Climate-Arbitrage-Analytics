@@ -44,10 +44,20 @@ c4.metric(
     "Average Comfort",
     f"{view.comfort_score.mean():.1f}/100"
 )
+st.divider()
 
 st.subheader("Trend")
-trend = view.groupby("timestamp")[metric].mean().sort_index()
+
+trend = (
+    view.set_index("timestamp")[metric]
+    .resample("D")
+    .mean()
+    .dropna()
+)
+
 st.line_chart(trend)
+
+st.divider()
 
 st.subheader("Location KPIs")
 kpi = view.groupby("location_id").agg(
@@ -69,9 +79,14 @@ metric_labels = {
 }
 
 st.subheader(f"{metric_labels[metric]} by Hour")
-hourly = view.groupby("hour")[metric].mean().sort_index()
-st.line_chart(hourly)
 
+hourly = (
+    view.groupby("hour")[metric]
+    .mean()
+    .reindex(range(24))
+)
+
+st.line_chart(hourly)
 
 st.subheader("Weather Risk Alerts")
 
