@@ -99,3 +99,4 @@ AtmoSync demonstrates practical skills in:
 - Python application development
 
 ## Disclaimer
+This project is a portfolio demonstration using synthetic or public-safe climate telemetry. Its anomaly and risk indicators are experimental and are not intended for operational weather forecasting or emergency decisions.
