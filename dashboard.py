@@ -59,6 +59,27 @@ st.line_chart(trend)
 
 st.divider()
 
+st.subheader("Analytics Summary")
+
+if not view.empty:
+    summary_rain = (view["rain_risk"] == "High").sum()
+    summary_wind = (view["wind_risk"] == "High").sum()
+
+    st.info(
+        f"""
+        **AtmoSync Report**
+
+        - Total observations: {len(view):,}
+        - Locations analyzed: {view['location_id'].nunique()}
+        - Average temperature: {view['temperature_c'].mean():.1f} °C
+        - Average humidity: {view['humidity_pct'].mean():.1f}%
+        - High rain-risk observations: {summary_rain}
+        - High wind-risk observations: {summary_wind}
+        """
+    )
+else:
+    st.warning("No data available. Please select a location.")
+
 st.subheader("Location KPIs")
 kpi = view.groupby("location_id").agg(
     Avg_Temperature_C=("temperature_c", "mean"),
