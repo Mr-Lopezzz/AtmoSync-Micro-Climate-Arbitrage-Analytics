@@ -10,7 +10,36 @@ OUT.mkdir(exist_ok=True)
 
 
 def load_data():
-    raw = pd.read_csv(DATA / "atmosync_raw.csv")
+    input_file = DATA / "atmosync_raw.csv"
+
+    if not input_file.exists():
+        raise FileNotFoundError(
+            f"Raw dataset not found: {input_file}"
+        )
+
+    raw = pd.read_csv(input_file)
+
+    required_columns = [
+        "timestamp",
+        "location_id",
+        "temperature_c",
+        "humidity_pct",
+        "wind_speed_kmh",
+        "precipitation_mm",
+        "pressure_hpa",
+        "solar_wm2",
+    ]
+
+    missing_columns = [
+        col for col in required_columns if col not in raw.columns
+    ]
+
+    if missing_columns:
+        raise ValueError(
+            f"Dataset is missing required columns: {missing_columns}"
+        )
+    if raw.empty:
+        raise ValueError("The raw dataset is empty.")
     df = raw.copy()
     df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
     df = df.drop_duplicates().sort_values("timestamp")
@@ -61,9 +90,9 @@ def make_charts(df, kpi):
     plt.figure(figsize=(11, 5))
     daily = df.groupby("date")["temperature_c"].mean()
     plt.plot(pd.to_datetime(daily.index), daily.values)
-    plt.title("AtmoSync — Daily Average Temperature")
+    plt.title("AtmoSync - Daily Average Temperature")
     plt.xlabel("Date")
-    plt.ylabel("Temperature (°C)")
+    plt.ylabel("Temperature (deg C)")
     plt.tight_layout()
     plt.savefig(OUT / "daily_trend.png", dpi=160)
     plt.close()
@@ -72,7 +101,7 @@ def make_charts(df, kpi):
     plt.bar(kpi["location_id"], kpi["avg_comfort_score"])
     plt.title("Average Comfort Score by Location")
     plt.xlabel("Location")
-    plt.ylabel("Comfort Score (0–100)")
+    plt.ylabel("Comfort Score (0-100)")
     plt.tight_layout()
     plt.savefig(OUT / "location_comparison.png", dpi=160)
     plt.close()
