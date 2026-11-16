@@ -20,95 +20,182 @@ st.set_page_config(
 # CUSTOM UI STYLING
 # --------------------------------------------------
 
+
 st.markdown("""
 <style>
+    /* Main application */
     .stApp {
-        background-color: #0b1120;
-        color: #e5e7eb;
+        background: #0B1220;
+        color: #E5E7EB;
     }
 
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+        max-width: 1500px;
+    }
+
+    /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #111827;
-        border-right: 1px solid #263449;
+        background: #111B2E;
+        border-right: 1px solid #26364D;
     }
 
+    [data-testid="stSidebar"] h2 {
+        color: #F8FAFC;
+        font-size: 20px;
+    }
+
+    [data-testid="stSidebar"] label {
+        color: #CBD5E1 !important;
+    }
+
+    /* Main branding */
     .main-title {
-        font-size: 32px;
+        font-size: 38px;
         font-weight: 800;
-        color: #f8fafc;
-        letter-spacing: -1px;
+        color: #F8FAFC;
+        letter-spacing: -1.5px;
+        margin-bottom: 2px;
     }
 
     .subtitle {
-        color: #94a3b8;
-        font-size: 14px;
-        margin-bottom: 25px;
-    }
-
-    .section-title {
-        font-size: 20px;
+        color: #38BDF8;
+        font-size: 12px;
         font-weight: 700;
-        color: #f1f5f9;
-        margin-top: 15px;
-        margin-bottom: 12px;
+        letter-spacing: 2px;
+        margin-bottom: 30px;
     }
 
+    /* Section headings */
+    .section-title {
+        font-size: 21px;
+        font-weight: 750;
+        color: #F1F5F9;
+        margin-top: 22px;
+        margin-bottom: 16px;
+    }
+
+    /* KPI cards */
     div[data-testid="stMetric"] {
-        background: linear-gradient(145deg, #17243a, #111c2e);
-        border: 1px solid #263b57;
-        padding: 20px 18px;
-        border-radius: 12px;
+        background: linear-gradient(
+            145deg, #172942, #111C30
+        );
+        border: 1px solid #29415D;
+        border-radius: 14px;
+        padding: 20px;
+        min-height: 115px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
 
     div[data-testid="stMetricLabel"] {
-        color: #94a3b8;
+        color: #A8B9CE;
+        font-size: 13px;
+        font-weight: 600;
     }
 
     div[data-testid="stMetricValue"] {
-        color: #7dd3fc;
-        font-weight: 750;
+        color: #38BDF8;
+        font-size: 28px;
+        font-weight: 800;
     }
 
-    div[data-testid="stDataFrame"] {
-        border: 1px solid #263449;
-        border-radius: 10px;
+    /* Charts and tables */
+    [data-testid="stDataFrame"] {
+        border: 1px solid #263B55;
+        border-radius: 12px;
+        overflow: hidden;
     }
 
+    [data-testid="stPlotlyChart"],
+    [data-testid="stVegaLiteChart"] {
+        border-radius: 12px;
+    }
+
+    /* Download buttons */
     div.stDownloadButton > button {
-        background: #0879d1;
+        background: linear-gradient(
+            90deg, #0879D1, #0891B2
+        );
         color: white;
         border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        width: 100%;
+        border-radius: 9px;
+        min-height: 44px;
+        font-weight: 700;
+        transition: 0.2s ease;
     }
 
     div.stDownloadButton > button:hover {
-        background: #0ea5e9;
+        background: #0EA5E9;
         color: white;
+        border: none;
     }
 
+    /* General buttons */
+    .stButton > button {
+        border-radius: 9px;
+        font-weight: 600;
+    }
+
+    /* Dividers */
     hr {
-        border-color: #263449;
+        border-color: #26364D;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    /* Captions */
+    [data-testid="stCaptionContainer"] {
+        color: #94A3B8;
+    }
+
+    /* Select boxes and multiselects */
+    [data-baseweb="select"] > div {
+        background-color: #17243A;
+        border-color: #344861;
+        border-radius: 8px;
+    }
+
+    /* Responsive spacing */
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 30px;
+        }
+
+        .main .block-container {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
 
+
+
 # --------------------------------------------------
-# HEADER
+# PROFESSIONAL HEADER
 # --------------------------------------------------
 
-st.markdown(
-    '<div class="main-title">🌦️ AtmoSync</div>',
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    '<div class="subtitle">'
-    'MICRO-CLIMATE INTELLIGENCE & ENVIRONMENTAL MONITORING'
-    '</div>',
-    unsafe_allow_html=True
-)
+st.markdown("""
+<div class="header-card">
+    <div style="display:flex; justify-content:space-between;
+                align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+            <div class="main-title">🌦️ AtmoSync</div>
+            <div class="subtitle">
+                MICRO-CLIMATE INTELLIGENCE PLATFORM
+            </div>
+        </div>
+        <div class="status-label">
+            ● ANALYTICS SYSTEM ACTIVE
+        </div>
+    </div>
+    <div class="header-description">
+        Environmental monitoring, climate analytics,
+        anomaly detection and location-based weather risk intelligence.
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # --------------------------------------------------
 # LOAD DATA
@@ -163,8 +250,9 @@ if view.empty:
     st.warning("No data available. Please select at least one location.")
     st.stop()
 
+
 # --------------------------------------------------
-# KPI CARDS
+# EXECUTIVE KPI CARDS — ATMOSYNC 2.0
 # --------------------------------------------------
 
 st.markdown(
@@ -172,39 +260,44 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-c1, c2, c3, c4 = st.columns(4)
+kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
 
-c1.metric(
+kpi1.metric(
     "Total Observations",
-    f"{len(view):,}"
+    f"{len(view):,}",
+    help="Total climate observations in the selected locations."
 )
 
-c2.metric(
+kpi2.metric(
+    "Monitoring Locations",
+    f"{view['location_id'].nunique():,}",
+    help="Number of selected monitoring locations."
+)
+
+kpi3.metric(
     "Average Temperature",
-    f"{view['temperature_c'].mean():.1f} °C"
+    f"{view['temperature_c'].mean():.1f} °C",
+    help="Average recorded temperature."
 )
 
-c3.metric(
+kpi4.metric(
     "Average Humidity",
-    f"{view['humidity_pct'].mean():.1f}%"
+    f"{view['humidity_pct'].mean():.1f}%",
+    help="Average relative humidity."
 )
 
-c4.metric(
+kpi5.metric(
     "Comfort Index",
-    f"{view['comfort_score'].mean():.1f}/100"
+    f"{view['comfort_score'].mean():.1f}/100",
+    help="Average calculated environmental comfort score."
 )
 
 st.divider()
 
-# --------------------------------------------------
 
-# CLIMATE TREND
 # --------------------------------------------------
-
-st.markdown(
-    '<div class="section-title">📈 Climate Trends</div>',
-    unsafe_allow_html=True
-)
+# PROFESSIONAL CLIMATE TREND
+# --------------------------------------------------
 
 trend = (
     view.set_index("timestamp")[metric]
@@ -213,25 +306,20 @@ trend = (
     .dropna()
 )
 
-st.caption(f"Daily average — {selected_metric}")
+trend_chart = trend.rename("Value").reset_index()
 
-# Format dates for a clearer X-axis
-trend_chart = (
-    trend.rename_axis("Date")
-    .rename("Value")
-    .reset_index()
+st.caption(
+    f"Daily average {selected_metric.lower()} across selected monitoring locations"
 )
-
-trend_chart["Date"] = pd.to_datetime(
-    trend_chart["Date"]
-).dt.strftime("%d %b")
 
 st.line_chart(
     trend_chart,
-    x="Date",
+    x="timestamp",
     y="Value",
-    x_label="Date",
+    x_label="Monitoring Date",
     y_label=selected_metric,
+    color="#38BDF8",
+    height=380,
     use_container_width=True
 )
 
@@ -661,23 +749,30 @@ risk_display = risk_by_location.rename(columns={
     "High_Wind_Risk": "High Wind Alerts"
 })
 
+
 st.dataframe(
     risk_display,
     hide_index=True,
     use_container_width=True,
     column_config={
-        "Location": st.column_config.TextColumn("Location"),
+        "Location": st.column_config.TextColumn(
+            "Monitoring Location"
+        ),
         "High Rain Alerts": st.column_config.ProgressColumn(
             "High Rain Alerts",
             format="%d",
             min_value=0,
-            max_value=max(1, int(risk_by_location["High_Rain_Risk"].max()))
+            max_value=max(
+                1, int(risk_display["High Rain Alerts"].max())
+            )
         ),
         "High Wind Alerts": st.column_config.ProgressColumn(
             "High Wind Alerts",
             format="%d",
             min_value=0,
-            max_value=max(1, int(risk_by_location["High_Wind_Risk"].max()))
+            max_value=max(
+                1, int(risk_display["High Wind Alerts"].max())
+            )
         )
     }
 )
