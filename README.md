@@ -2,6 +2,21 @@ AtmoSync — Micro-Climate Analytics
 
 Environmental Intelligence & Weather Risk Monitoring Platform
 
+## Dashboard Screenshots
+
+### 1. Dashboard Overview
+![Dashboard Overview](screenshots/dashboard-overview.png)
+
+### 2. Climate Trends
+![Climate Trends](screenshots/climate-trends.png)
+
+### 3. Location Analysis
+![Location Analysis](screenshots/location-analysis.png)
+
+### 4. Weather Risk Monitoring
+![Weather Risk](screenshots/weather-risk.png)
+
+
 Project Overview
 
 AtmoSync is a Python-based data analytics platform designed to process, analyze, and visualize micro-climate observations across multiple monitoring locations.
