@@ -659,6 +659,17 @@ kpi = kpi.rename(columns={
     "High_Rain_Count": "High Rain Alerts",
     "High_Wind_Count": "High Wind Alerts"
 })
+# Rank locations by average comfort score
+kpi = kpi.sort_values(
+    by="Comfort Index",
+    ascending=False
+)
+
+kpi.insert(
+    0,
+    "Performance Rank",
+    range(1, len(kpi) + 1)
+)
 
 st.dataframe(
     kpi,
@@ -715,8 +726,12 @@ st.line_chart(
 st.divider()
 
 st.markdown(
-    '<div class="section-title">⚠️ Weather Risk Monitoring</div>',
+    '<div class="section-title">Weather Risk Monitoring</div>',
     unsafe_allow_html=True
+)
+
+st.caption(
+    "Location-wise monitoring of high rainfall and wind risk alerts."
 )
 
 risk_by_location = view.groupby("location_id").agg(
@@ -749,6 +764,7 @@ risk_display = risk_by_location.rename(columns={
     "High_Wind_Risk": "High Wind Alerts"
 })
 
+st.caption("Alert counts by monitoring location. Higher values indicate more frequent weather-risk events.")
 
 st.dataframe(
     risk_display,
@@ -801,6 +817,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.caption(
+    "Distribution of weather-risk events across monitoring locations."
+)
+
 rc1, rc2 = st.columns(2)
 
 with rc1:
@@ -827,8 +847,12 @@ with rc2:
 st.divider()
 
 st.markdown(
-    '<div class="section-title">📥 Download Centre</div>',
+    '<div class="section-title">Download Centre</div>',
     unsafe_allow_html=True
+)
+
+st.caption(
+    "Export cleaned climate data and analytical outputs for further analysis."
 )
 
 st.caption(
@@ -867,4 +891,16 @@ with d2:
 
 st.caption(
     "Reports are generated using your currently selected dashboard filters."
+)
+st.divider()
+
+st.markdown(
+    """
+    <div style="text-align:center; padding:15px; color:#94A3B8;">
+        <strong>AtmoSync</strong> | Micro-Climate Intelligence Platform
+        <br>
+        <small>Built with Python, Pandas and Streamlit | Portfolio Analytics Project</small>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
