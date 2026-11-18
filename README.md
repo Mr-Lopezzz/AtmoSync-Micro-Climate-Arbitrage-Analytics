@@ -138,3 +138,5 @@ AtmoSync is an independent portfolio project demonstrating the application of Py
 Disclaimer
 
 This project is a portfolio demonstration using synthetic or public-safe climate telemetry. Its anomaly detection and risk indicators are experimental and are not intended for operational weather forecasting or emergency decisions.
+
+Project development updates and documentation improvements by the internship team.
