@@ -594,6 +594,18 @@ if not view.empty:
         else "Moderate" if score >= 75
         else "Low"
     )
+   
+        # Rank locations by weather risk
+    risk_summary = risk_summary.sort_values(
+        by="Risk_Score",
+        ascending=False
+    )
+
+    risk_summary.insert(
+        0,
+        "Risk Rank",
+        range(1, len(risk_summary) + 1)
+    )
 
     st.markdown("#### Location Risk Scores")
 
@@ -698,6 +710,14 @@ st.dataframe(
     }
 )
 
+# Comfort Index Comparison Chart
+st.markdown("### 🏆 Comfort Index by Location")
+
+st.bar_chart(
+    kpi["Comfort Index"],
+    horizontal=True,
+    use_container_width=True
+)
 # --------------------------------------------------
 # HOURLY ANALYSIS
 # --------------------------------------------------
