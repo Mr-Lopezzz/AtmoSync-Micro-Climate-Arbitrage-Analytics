@@ -14,3 +14,7 @@ The project can support decisions such as selecting more favorable time windows,
 
 ## Dashboard
 The Streamlit dashboard provides location filters, KPI cards, metric trends, location comparisons, hourly comfort patterns and rain/wind risk distributions.
+
+git add .
+git commit -m "Add project summary documentation"
+git push origin piyush-work
