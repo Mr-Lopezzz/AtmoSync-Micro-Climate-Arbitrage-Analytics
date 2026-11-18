@@ -606,7 +606,6 @@ if not view.empty:
         "Risk Rank",
         range(1, len(risk_summary) + 1)
     )
-
     st.markdown("#### Location Risk Scores")
 
     risk_display = risk_summary.reset_index().rename(
@@ -619,6 +618,20 @@ if not view.empty:
             "Risk_Score": "Risk Score",
             "Risk_Level": "Risk Level"
         }
+    )
+
+    # Add visual risk level indicators
+    risk_display["Risk Level"] = risk_display["Risk Level"].map({
+        "High": "🔴 High",
+        "Moderate": "🟡 Moderate",
+        "Low": "🟢 Low"
+    })
+
+    st.write(
+        "Risk Score Range:",
+        risk_summary["Risk_Score"].min(),
+        "to",
+        risk_summary["Risk_Score"].max()
     )
 
     st.dataframe(
