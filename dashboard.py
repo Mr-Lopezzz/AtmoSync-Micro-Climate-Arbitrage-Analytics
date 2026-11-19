@@ -937,3 +937,21 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+# --------------------------------------------------
+# CREATOR SIGNATURE
+# --------------------------------------------------
+
+st.markdown(
+    """
+    <div style="
+        text-align: right;
+        padding: 4px 10px;
+        color: #475569;
+        font-size: 9px;
+        opacity: 0.45;
+    ">
+        Nithish Lopes · AtmoSync
+    </div>
+    """,
+    unsafe_allow_html=True
+)
