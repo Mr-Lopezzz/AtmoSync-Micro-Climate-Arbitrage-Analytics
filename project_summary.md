@@ -18,3 +18,11 @@ The Streamlit dashboard provides location filters, KPI cards, metric trends, loc
 git add .
 git commit -m "Add project summary documentation"
 git push origin piyush-work
+
+
+## Future Improvements
+
+The project can be improved by adding real-time weather 
+data integration, advanced forecasting techniques, and 
+interactive visualizations. These improvements will help 
+users make better decisions based on micro-climate conditions.
