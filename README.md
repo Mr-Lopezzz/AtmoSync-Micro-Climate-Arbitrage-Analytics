@@ -140,3 +140,12 @@ Disclaimer
 This project is a portfolio demonstration using synthetic or public-safe climate telemetry. Its anomaly detection and risk indicators are experimental and are not intended for operational weather forecasting or emergency decisions.
 
 Project development updates and documentation improvements by the internship team.
+
+
+## Project Workflow
+
+The AtmoSync project follows a structured data analysis workflow.
+It includes data collection, data cleaning, preprocessing,
+exploratory data analysis, visualization, and dashboard development.
+The final results help users understand micro-climate patterns
+and make better data-driven decisions.
