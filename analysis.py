@@ -9,6 +9,7 @@ OUT = ROOT / "outputs"
 OUT.mkdir(exist_ok=True)
 
 
+
 def load_data():
     input_file = DATA / "atmosync_raw.csv"
 
@@ -38,11 +39,23 @@ def load_data():
         raise ValueError(
             f"Dataset is missing required columns: {missing_columns}"
         )
+
     if raw.empty:
         raise ValueError("The raw dataset is empty.")
+
     df = raw.copy()
-    df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
+
+    df["timestamp"] = pd.to_datetime(
+        df["timestamp"], errors="coerce"
+    )
+
+    invalid_timestamps = df["timestamp"].isna().sum()
+    df = df.dropna(subset=["timestamp"])
+
+    print(f"Invalid timestamps removed: {invalid_timestamps}")
+
     df = df.drop_duplicates().sort_values("timestamp")
+
     for col, lo, hi in [
         ("temperature_c", -20, 55),
         ("humidity_pct", 0, 100),
@@ -51,26 +64,42 @@ def load_data():
     ]:
         bad = ~df[col].between(lo, hi)
         df.loc[bad, col] = np.nan
+
     df["humidity_pct"] = df.groupby("location_id")["humidity_pct"].transform(
         lambda s: s.interpolate(limit_direction="both")
     )
+
     df["hour"] = df["timestamp"].dt.hour
     df["date"] = df["timestamp"].dt.date
+
     df["comfort_score"] = 100 - (
         np.abs(df["temperature_c"] - 27) * 5
         + np.abs(df["humidity_pct"] - 55) * 0.55
     )
-    df["comfort_score"] = df["comfort_score"].clip(0, 100).round(2)
-    df["rain_risk"] = np.select(
-        [df["precipitation_mm"] >= 1, df["precipitation_mm"] >= 0.3],
-        ["High", "Medium"], default="Low"
-    )
-    df["wind_risk"] = np.select(
-        [df["wind_speed_kmh"] >= 12, df["wind_speed_kmh"] >= 8],
-        ["High", "Medium"], default="Low"
-    )
-    return df
 
+    df["comfort_score"] = df["comfort_score"].clip(0, 100).round(2)
+
+    df["rain_risk"] = np.select(
+        [
+            df["precipitation_mm"].isna(),
+            df["precipitation_mm"] >= 1,
+            df["precipitation_mm"] >= 0.3,
+        ],
+        ["Unknown", "High", "Medium"],
+        default="Low"
+    )
+
+    df["wind_risk"] = np.select(
+        [
+            df["wind_speed_kmh"].isna(),
+            df["wind_speed_kmh"] >= 12,
+            df["wind_speed_kmh"] >= 8,
+        ],
+        ["Unknown", "High", "Medium"],
+        default="Low"
+    )
+
+    return df
 
 def build_kpis(df):
     kpi = df.groupby("location_id").agg(
