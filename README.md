@@ -149,3 +149,14 @@ It includes data collection, data cleaning, preprocessing,
 exploratory data analysis, visualization, and dashboard development.
 The final results help users understand micro-climate patterns
 and make better data-driven decisions.
+
+## Dashboard Execution
+
+The AtmoSync dashboard is developed using Streamlit.
+To launch the dashboard, open the project terminal
+and execute the following command:
+
+python -m streamlit run dashboard.py
+
+The dashboard displays climate observations,
+temperature, humidity, and daily climate trends.
