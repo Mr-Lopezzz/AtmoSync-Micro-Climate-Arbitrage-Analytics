@@ -26,3 +26,10 @@ The project can be improved by adding real-time weather
 data integration, advanced forecasting techniques, and 
 interactive visualizations. These improvements will help 
 users make better decisions based on micro-climate conditions.
+
+## Data Cleaning Process
+
+Data cleaning is an important step in our project.
+We check missing values, remove duplicate records,
+correct data types, and prepare clean data for analysis.
+This process helps improve data quality and accuracy.
