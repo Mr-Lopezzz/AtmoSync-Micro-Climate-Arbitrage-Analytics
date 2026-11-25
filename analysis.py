@@ -43,6 +43,8 @@ def load_data():
     if raw.empty:
         raise ValueError("The raw dataset is empty.")
 
+    total_input_records = len(raw)
+    
     df = raw.copy()
 
     df["timestamp"] = pd.to_datetime(
@@ -50,10 +52,12 @@ def load_data():
     )
 
     invalid_timestamps = df["timestamp"].isna().sum()
+
     df = df.dropna(subset=["timestamp"])
 
     print(f"Invalid timestamps removed: {invalid_timestamps}")
 
+    duplicate_records = df.duplicated().sum()
     df = df.drop_duplicates().sort_values("timestamp")
 
     for col, lo, hi in [
@@ -64,11 +68,17 @@ def load_data():
     ]:
         bad = ~df[col].between(lo, hi)
         df.loc[bad, col] = np.nan
+    
+    missing_values_before_imputation = df.isna().sum()
 
     df["humidity_pct"] = df.groupby("location_id")["humidity_pct"].transform(
         lambda s: s.interpolate(limit_direction="both")
     )
 
+    df["temperature_c"] = df.groupby("location_id")["temperature_c"].transform(
+        lambda s: s.interpolate(limit_direction="both")
+    )
+    
     df["hour"] = df["timestamp"].dt.hour
     df["date"] = df["timestamp"].dt.date
 
@@ -99,7 +109,70 @@ def load_data():
         default="Low"
     )
 
+    final_cleaned_records = len(df)
+
+    missing_values_after_imputation = df.isna().sum()
+
+    create_data_quality_report(
+        total_input_records,
+        invalid_timestamps,
+        duplicate_records,
+        final_cleaned_records,
+        missing_values_before_imputation,
+        missing_values_after_imputation
+    )
+
     return df
+
+def create_data_quality_report(
+    total_input_records,
+    invalid_timestamps,
+    duplicate_records,
+    final_cleaned_records,
+    missing_values_before_imputation,
+    missing_values_after_imputation
+):
+    total_values_imputed = (
+        missing_values_before_imputation
+        - missing_values_after_imputation.reindex(
+            missing_values_before_imputation.index
+        )
+    ).clip(lower=0).sum()
+
+    quality_report = pd.DataFrame({
+        "Metric": [
+            "Total Input Records",
+            "Invalid Timestamps Removed",
+            "Duplicate Records Removed",
+            "Final Cleaned Records",
+            "Total Values Imputed",
+        ],
+        "Value": [
+            total_input_records,
+            invalid_timestamps,
+            duplicate_records,
+            final_cleaned_records,
+            total_values_imputed,
+        ]
+    })
+
+    quality_report.to_csv(
+        OUT / "data_quality_report.csv",
+        index=False
+    )
+
+    missing_report = pd.DataFrame({
+        "Column": missing_values_before_imputation.index,
+        "Missing Before Imputation": missing_values_before_imputation.values,
+        "Missing After Imputation": missing_values_after_imputation.reindex(
+            missing_values_before_imputation.index
+        ).values
+    })
+
+    missing_report.to_csv(
+        OUT / "missing_values_report.csv",
+        index=False
+    )
 
 def build_kpis(df):
     kpi = df.groupby("location_id").agg(
