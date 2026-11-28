@@ -48,7 +48,9 @@ def load_data():
     df = raw.copy()
 
     df["timestamp"] = pd.to_datetime(
-        df["timestamp"], errors="coerce"
+        df["timestamp"],
+        format="%d-%m-%y %H:%M",
+        errors="coerce"
     )
 
     invalid_timestamps = df["timestamp"].isna().sum()
@@ -139,6 +141,16 @@ def create_data_quality_report(
         )
     ).clip(lower=0).sum()
 
+    total_missing_before = missing_values_before_imputation.sum()
+
+    cleaning_efficiency = (
+        (total_values_imputed / total_missing_before) * 100
+        if total_missing_before > 0
+        else 0
+    )
+
+    cleaning_efficiency = round(cleaning_efficiency, 2)
+
     quality_report = pd.DataFrame({
         "Metric": [
             "Total Input Records",
@@ -146,6 +158,7 @@ def create_data_quality_report(
             "Duplicate Records Removed",
             "Final Cleaned Records",
             "Total Values Imputed",
+            "Data Cleaning Efficiency (%)",
         ],
         "Value": [
             total_input_records,
@@ -153,6 +166,7 @@ def create_data_quality_report(
             duplicate_records,
             final_cleaned_records,
             total_values_imputed,
+            cleaning_efficiency,
         ]
     })
 
@@ -195,12 +209,14 @@ def make_charts(df, kpi):
     plt.title("AtmoSync - Daily Average Temperature")
     plt.xlabel("Date")
     plt.ylabel("Temperature (deg C)")
+    plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
     plt.savefig(OUT / "daily_trend.png", dpi=160)
     plt.close()
 
     plt.figure(figsize=(9, 5))
-    plt.bar(kpi["location_id"], kpi["avg_comfort_score"])
+    bars = plt.bar(kpi["location_id"], kpi["avg_comfort_score"])
+    plt.bar_label(bars, fmt="%.2f", padding=3)
     plt.title("Average Comfort Score by Location")
     plt.xlabel("Location")
     plt.ylabel("Comfort Score (0-100)")
